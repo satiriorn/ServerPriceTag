@@ -10,13 +10,11 @@ class Response(BaseHTTPRequestHandler):
     api_key = os.getenv("api_key")
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
-        post_data = self.rfile.read(content_length)  # <--- Gets the data itself
-        id = post_data['id']
-        apikey = post_data['api_key']
-        print(post_data)
-        print(self.api_key)
-        print(id)
-        print(apikey)
+        post_data = self.rfile.read(content_length) # <--- Gets the data itself
+        data = post_data.decode('utf-8')
+        x = data.split("&")
+        apikey = x[0].split("=")[1]
+        id = x[1].split("=")[1]
         if apikey == self.api_key:
             if(self._DB == None):
                 self._DB = DB.DataBase()
@@ -27,6 +25,5 @@ class Response(BaseHTTPRequestHandler):
             self.wfile.write(bytes(ResponseData, 'utf-16'))
 
 #httpd = HTTPServer(('localhost', 8000), Response)
-server_address = ('', int(os.environ.get('PORT', '3306')))
-httpd = ThreadHTTPServer(server_address, Response)
+httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
 httpd.serve_forever()
