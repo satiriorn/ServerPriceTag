@@ -1,7 +1,10 @@
-import DB, requests
+import DB, requests, os
 from liqpay3 import LiqPay
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
 
+class ThreadHTTPServer(ThreadingMixIn, HTTPServer):
+    pass
 """
 liqpay = LiqPay()
 html = liqpay.cnb_form({
@@ -33,5 +36,6 @@ class Response(BaseHTTPRequestHandler):
         #self.end_headers()
 
 #httpd = HTTPServer(('localhost', 8000), Response)
-httpd = HTTPServer(('https://price-tag-database.herokuapp.com/', 3306), Response)
+server_address = ('', int(os.environ.get('PORT', '3306')))
+httpd = ThreadHTTPServer(server_address, Response)
 httpd.serve_forever()
