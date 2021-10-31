@@ -21,8 +21,8 @@ class Response(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             data = self._DB.GetData(int(id))
-            ResponseData = data[0]+";"+data[1]+";"+str(data[2])+";"+str(data[3])+";"+str(data[4])
-            self.wfile.write(bytes(ResponseData, 'utf-16'))
+            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"</td> </tr>"
+            self.wfile.write(ResponseData.encode('utf-8'))
 
 #httpd = HTTPServer(('localhost', 8000), Response)
 httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
