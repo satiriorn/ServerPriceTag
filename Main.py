@@ -22,7 +22,7 @@ class Response(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             data = self._DB.GetData(int(id))
-            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+self.link_pay(data)+"</td> </tr>"
+            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+str(self.link_pay(data))+"</td> </tr>"
             self.wfile.write(ResponseData.encode('utf-8'))
 
     @classmethod
