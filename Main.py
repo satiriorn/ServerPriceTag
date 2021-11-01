@@ -1,6 +1,7 @@
-import DB, requests, os, liqpay3
+import DB, requests, os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
+from liqpay3 import LiqPay
 
 class ThreadHTTPServer(ThreadingMixIn, HTTPServer):
     pass
@@ -21,8 +22,28 @@ class Response(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             data = self._DB.GetData(int(id))
-            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"</td> </tr>"
+            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+self.link_pay(data)+"</td> </tr>"
             self.wfile.write(ResponseData.encode('utf-8'))
+
+    @classmethod
+    def link_pay(cls, data):
+        liqpay = LiqPay(os.getenv("public_key"), os.getenv("private_key"))
+        d = {
+            'action': 'pay',
+            'amount':  data[2],
+            'currency': 'UAH',
+            'description': data[0],
+            'order_id': 'order_id_1',
+            'language': 'uk',
+            'version': '3'
+        }
+        s = liqpay.cnb_signature(d)
+        d = liqpay.cnb_data(d)
+        r = requests.post('https://www.liqpay.ua/api/3/checkout/', data={
+            'data': d,
+            'signature': s})
+        return r.url
+
 
 #httpd = HTTPServer(('localhost', 8000), Response)
 httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
