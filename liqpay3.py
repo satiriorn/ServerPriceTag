@@ -74,11 +74,11 @@ class LiqPay(object):
             raise ParamValidationError("Invalid param: '{}'".format(key))
 
         # spike to set correct values for language, currency and sandbox params
-        language = params.get("language", "ua")
+        language = 'eng'#params.get("language", "ru")
         currency = params["currency"]
         params.update(
             language=language,
-            currency=currency if currency != "RUR" else "RUB",
+            currency=currency if currency != "UAH" else "UAH",
             sandbox=int(bool(params.get("sandbox")))
         )
 

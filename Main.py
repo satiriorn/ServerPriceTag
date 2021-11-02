@@ -22,8 +22,19 @@ class Response(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             data = self._DB.GetData(int(id))
-            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+str(self.link_pay(data))+"</td> </tr>"
+            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"</td> </tr>"
             self.wfile.write(ResponseData.encode('utf-8'))
+
+    def do_GET(self):
+        price_id = self.path.replace("/", "")
+        if len(price_id) > 0:
+            if (self._DB == None):
+                self._DB = DB.DataBase()
+            data = self._DB.GetData(int(price_id))
+            if len(data) > 0:
+                self.send_response(301)
+                self.send_header('Location', self.link_pay(data))
+                self.end_headers()
 
     @classmethod
     def link_pay(cls, data):
