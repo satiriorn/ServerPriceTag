@@ -34,7 +34,7 @@ class Response(BaseHTTPRequestHandler):
                 self._DB = DB.DataBase()
             data = self._DB.GetData(int(price_id))
             if len(data) > 0:
-                self.send_response(301)
+                self.send_response(302)
                 self.send_header('Location', self.link_pay(data))
                 self.end_headers()
 
@@ -60,6 +60,6 @@ class Response(BaseHTTPRequestHandler):
         return r.url
 
 
-#httpd = HTTPServer(('localhost', 8000), Response)
-httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
+httpd = HTTPServer(('localhost', 8000), Response)
+#httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
 httpd.serve_forever()
