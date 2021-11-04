@@ -60,6 +60,6 @@ class Response(BaseHTTPRequestHandler):
         return r.url
 
 
-httpd = HTTPServer(('localhost', 8000), Response)
-#httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
+#httpd = HTTPServer(('localhost', 8000), Response)
+httpd = ThreadHTTPServer(('', int(os.environ.get('PORT', '3306'))), Response)
 httpd.serve_forever()
