@@ -9,6 +9,7 @@ class ThreadHTTPServer(ThreadingMixIn, HTTPServer):
 class Response(BaseHTTPRequestHandler):
     _DB = None
     api_key = os.getenv("api_key")
+    count = 1
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
@@ -16,6 +17,7 @@ class Response(BaseHTTPRequestHandler):
         x = data.split("&")
         apikey = x[0].split("=")[1]
         id = x[1].split("=")[1]
+
         if apikey == self.api_key:
             if(self._DB == None):
                 self._DB = DB.DataBase()
@@ -39,12 +41,14 @@ class Response(BaseHTTPRequestHandler):
     @classmethod
     def link_pay(cls, data):
         liqpay = LiqPay(os.getenv("public_key"), os.getenv("private_key"))
+        cls.count+=1
+        print(cls.count)
         d = {
             'action': 'pay',
             'amount':  data[2],
             'currency': 'UAH',
             'description': data[0],
-            'order_id': 'order_id_1',
+            'order_id': 'order_id_'+str(cls.count),
             'language': 'uk',
             'version': '3'
         }
