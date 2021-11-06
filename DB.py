@@ -26,7 +26,7 @@ class DataBase:
         return self.cursor
 
     def GetData(self, id):
-        sql = """SELECT Description, Title, Price, PromotionalPrice, Promotional FROM heroku_944d93c1a0e7204.PriceTag WHERE id_Tag="{0}";""".format(id)
+        sql = """SELECT Description, Title, Price, SalePrice, Sale, Measurement FROM heroku_944d93c1a0e7204.PriceTag WHERE id_Tag="{0}";""".format(id)
         self.GetCursor()
         self.cursor.execute(sql)
         return self.GetValue()

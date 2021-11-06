@@ -17,14 +17,13 @@ class Response(BaseHTTPRequestHandler):
         x = data.split("&")
         apikey = x[0].split("=")[1]
         id = x[1].split("=")[1]
-
         if apikey == self.api_key:
             if(self._DB == None):
                 self._DB = DB.DataBase()
             self.send_response(200)
             self.end_headers()
             data = self._DB.GetData(int(id))
-            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"</td> </tr>"
+            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+str(data[5])+"</td> </tr>"
             self.wfile.write(ResponseData.encode('utf-8'))
 
     def do_GET(self):
@@ -47,7 +46,7 @@ class Response(BaseHTTPRequestHandler):
             'action': 'pay',
             'amount':  data[2],
             'currency': 'UAH',
-            'description': data[0],
+            'description': data[1]+"\n"+data[0]+"\n"+str(data[2])+data[5],
             'order_id': 'order_id_'+str(cls.count),
             'language': 'uk',
             'version': '3'
