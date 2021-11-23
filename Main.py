@@ -1,4 +1,4 @@
-import DB, requests, os
+import DB, requests, os, time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from liqpay3 import LiqPay
@@ -23,7 +23,8 @@ class Response(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             data = self._DB.GetData(int(id))
-            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+str(data[5])+"</td> </tr>"
+            ResponseData = "<tr> <td>"+data[0]+"#"+data[1]+"#"+str(data[2])+"#"+str(data[3])+"#"+str(data[4])+"#"+str(data[5])+"#"\
+                           + time.strftime("%H:%M:%S", time.localtime())+"</td> </tr>"
             self.wfile.write(ResponseData.encode('utf-8'))
 
     def do_GET(self):
