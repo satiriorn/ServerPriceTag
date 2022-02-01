@@ -42,12 +42,14 @@ class Response(BaseHTTPRequestHandler):
     def link_pay(cls, data):
         liqpay = LiqPay(os.getenv("public_key"), os.getenv("private_key"))
         cls.count+=1
-        print(cls.count)
+        if(data[4] == True): price = data[3]
+        else: price = data[2]
+        print(data[4])
         d = {
             'action': 'pay',
-            'amount':  data[2],
+            'amount':  price,
             'currency': 'UAH',
-            'description': data[1]+"\n"+data[0]+"\n"+str(data[2])+data[5],
+            'description': data[1]+"\n"+data[0]+"\n"+str(price)+data[5],
             'order_id': 'order_id_'+str(cls.count),
             'language': 'uk',
             'version': '3'

@@ -12,8 +12,8 @@ class DataBase:
 
     def GetCursor(self):
         if self.cursor and self.db:
-            self.cursor.close()
-            self.db.close()
+                self.cursor.close()
+                self.db.close()
         self.db = mysql.connector.connect(
             host=os.getenv("HOST"),
             user=os.getenv("USER"),
